@@ -5,7 +5,7 @@ commands_num = {"1": "CREATE EMPTY", "2": "CREATE FILE", "3": "COPY", "4": "CHOO
                 "5": "ADD VERTEX", "6": "ADD EDGE", "7": "DELETE VERTEX", "8": "DELETE EDGE",
                 "9": "PRINT LIST EDGES FILE", "10": "PRINT LIST EDGES CONSOLE", "11": "PRINT ADJACENCY LIST CONSOLE",
                 "13": "HELP", "14": "PRINT LIST COMMANDS", "15": "PRINT LIST GRAPHS", "0": "EXIT",
-                "100": "IN DEGREE", "101": "TASK Ib 18", "102": "ACYCLE", "103": "K_PATH"}
+                "100": "IN DEGREE", "101": "TASK Ib 18", "102": "ACYCLE", "103": "K_PATH", "104": "KRUSKAL"}
 
 commands = {"CREATE EMPTY": "Create a new empty graph",
             "CREATE FILE": "Create a new graph from the file",
@@ -24,8 +24,9 @@ commands = {"CREATE EMPTY": "Create a new empty graph",
             "PRINT LIST GRAPHS": "Print list of graphs to the console(there)",
             "IN DEGREE": "-",
             "TASK Ib 18": "-",
-            "ACYCLE": "-",
-            "K_PATH": "-"
+            "ACYCLE": "Find out whether the graph is acycle",
+            "K_PATH": "-",
+            "KRUSKAL": "Find the minimum spanning tree"
             }
 
 graphs = {}
@@ -280,9 +281,16 @@ if __name__ == '__main__':
                     print("Enter the value of k: ", end="")
                     try:
                         k = int(input())
-                        print(tasks.k_path(cur_graph, k))
+                        tasks.k_path(cur_graph, k)
                     except ValueError:
                         print("ERROR Value of k is not integer")
+
+            elif command == "KRUSKAL" or command == "104":
+                if cur_graph is None:
+                    cur_graph = get_graph_by_name(None)
+                if cur_graph is not None:
+                    print(f"Current graph is: {chosen_graph}")
+                    tasks.kruskal(cur_graph)
 
         print("\nENTER THE COMMAND: ", end="")
         command = input()

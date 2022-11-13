@@ -61,7 +61,7 @@ def acycle(graph):
 
 def bfs(s, gr):
     used = [False for _ in range(len(gr.nodes_list))]
-    d = [0 for _ in range(len(gr.nodes_list))]
+    d = [-1 for _ in range(len(gr.nodes_list))]
     p = [None for _ in range(len(gr.nodes_list))]
     used[gr.nodes_list.index(s)] = True
     q = Queue()
@@ -84,21 +84,21 @@ def k_path(graph, k):
     ans = []
     for node in gr.nodes_list:
         d, p = bfs(node, gr)
-        if max(d) <= k:
+        if max(d) + 1 <= k and d.count(-1) == 1:
             ans.append(node)
-        # print(node, d, p)
+        #print(node, d, p)
     print(f"The list of vertexes which shortest way to others <= {k}: {' '.join(ans)}")
 
 
-def search(graph, parent, i):
+def search(gr, parent, i):
     if parent[gr.nodes_list.index(i)] == i:
         return i
-    return search(graph, parent, parent[gr.nodes_list.index(i)])
+    return search(gr, parent, parent[gr.nodes_list.index(i)])
 
 
-def apply_union(graph, parent, rank, x, y):
-    xroot = search(graph, parent, x)
-    yroot = search(graph, parent, y)
+def apply_union(gr, parent, rank, x, y):
+    xroot = search(gr, parent, x)
+    yroot = search(gr, parent, y)
     if rank[gr.nodes_list.index(xroot)] < rank[gr.nodes_list.index(yroot)]:
         parent[gr.nodes_list.index(xroot)] = yroot
     elif rank[gr.nodes_list.index(xroot)] > rank[gr.nodes_list.index(yroot)]:
@@ -109,6 +109,9 @@ def apply_union(graph, parent, rank, x, y):
 
 
 def kruskal(graph):
+    if graph.type == "directed":
+        print("ERROR: Incorrect type of graph")
+        return
     gr = graph.copy()
     n = len(gr.nodes_list)
     result = []
@@ -130,10 +133,13 @@ def kruskal(graph):
     except ValueError:
         print("ERROR: Incorrect type of weight")
         return
+    result_weight = 0
     for u, v, weight in result:
+        result_weight += int(weight)
         print(f"({u}, {v}) - {weight}")
+    print(f"Weight of all graph: {result_weight}")
 
 
-gr = Graph()
-gr.create_from_file("kr.txt")
-kruskal(gr)
+#gr = Graph()
+#gr.create_from_file("a.txt")
+#kruskal(gr)
