@@ -29,6 +29,7 @@ def new_graph(graph):
 
 color = []
 cycle = False
+INF = 1e15
 
 
 def dfs(node, gr):
@@ -140,6 +141,32 @@ def kruskal(graph):
     print(f"Weight of all graph: {result_weight}")
 
 
-#gr = Graph()
-#gr.create_from_file("a.txt")
-#kruskal(gr)
+# Вывести длины кратчайших путей от u до v1 и v2.
+def dijkstra(graph, s):
+    gr = graph.copy()
+    n = len(gr.nodes_list)
+    d = [INF] * n
+    pr = [0] * n
+    d[gr.nodes_list.index(s)] = 0
+    used = [False for _ in range(len(gr.nodes_list))]
+    for i in range(n):
+        v = -1
+        for j in range(n):
+            if not used[j] and (v == -1 or d[j] < d[v]):
+                v = j
+        if d[v] == INF:
+            break
+        used[v] = True
+        lst = gr.adj_list[gr.nodes_list[v]]
+        for nd in lst:
+            to = gr.nodes_list.index(nd[0])
+            ln = int(nd[1])
+            if d[v] + ln < d[to]:
+                d[to] = d[v] + ln
+                pr[to] = v
+    return d, pr
+
+
+gr = Graph()
+gr.create_from_file("Dei.txt")
+print(gr.adj_list)

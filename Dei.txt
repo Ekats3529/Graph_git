@@ -1,0 +1,16 @@
+!directed
+weighted
+7 12
+A B C D E F G
+A B 5
+A C 3
+B D 2
+B C 6
+B E 7
+C D 4
+C F 8
+D E 3
+D F 6
+G E 5
+G F 4
+E F 5
