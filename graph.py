@@ -2,17 +2,19 @@ from copy import deepcopy
 
 
 class Graph:
-    adj_list = {}
-    type = "!directed"
-    weighted = False
-    nodes_list = []
+    adj_list = {}   # список смежности
+    type = "!directed"      # тип графа: ориентированный или нет
+    weighted = False    # тип графа: взвешенный или нет
+    nodes_list = []     # список вершин
 
+    # инициализация графа
     def __init__(self, *attributes):
         self.adj_list = {}
         if len(attributes) > 0:
             self.type = attributes[0]
             self.weighted = True if attributes[1] == "weighted" else False
 
+    # метод для создания списка ребер
     def create_edge_list(self, dublicate):
         edge_list = []
 
@@ -30,6 +32,7 @@ class Graph:
 
         return edge_list
 
+    # метод для создания графа из файла
     def create_from_file(self, filename):
         adj_list = {}
         try:
@@ -84,12 +87,14 @@ class Graph:
         self.adj_list = adj_list
         return True
 
+    # метод для создания копии графа
     def copy(self):
         cp_graph = Graph(self.type, "weighted" if self.weighted else "!weighted")
         cp_graph.adj_list = deepcopy(self.adj_list)
         cp_graph.nodes_list = self.nodes_list.copy()
         return cp_graph
 
+    # метод для добавления вершины
     def add_node(self, node):
         if node in self.nodes_list:
             print(f"ERROR: Unable to add vertex {node}. The same vertex already exist")
@@ -98,6 +103,7 @@ class Graph:
         self.nodes_list.append(node)
         return True
 
+    # метод для добавления ребра (дуги)
     def add_edge(self, edge):
         if len(edge) < 2:
             print(f"Unable to add the edge")
@@ -181,6 +187,7 @@ class Graph:
                 return False
         return True
 
+    # метод для удаления вершины
     def delete_node(self, node):
         try:
             for item in self.adj_list.items():
@@ -194,6 +201,7 @@ class Graph:
             return False
         return True
 
+    # метод для удаления ребра (дуги)
     def delete_edge(self, edge):
         v, u = edge[0], edge[1]
 
@@ -213,13 +221,14 @@ class Graph:
                 return False
         return True
 
+    # метод для вывода графа в файл
     def print_to_file(self, filename):
         try:
             fout = open(filename, 'w', encoding="utf8")
         except FileNotFoundError:
             print("ERROR: No such file or directory")
             return False
-        lst = self.create_edge_list()
+        lst = self.create_edge_list(False)
         print(self.type, file=fout)
         print("weighted" if self.weighted else "!weighted", file=fout)
         print(len(self.nodes_list), len(lst), file=fout)
@@ -228,6 +237,7 @@ class Graph:
             print(f"{edge[0]} {edge[1]}", file=fout)
         return True
 
+    # метод для вывода списка смежности в консоль
     def print_to_console(self):
         print()
         if self.weighted:

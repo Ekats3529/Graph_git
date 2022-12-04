@@ -6,7 +6,7 @@ commands_num = {"1": "CREATE EMPTY", "2": "CREATE FILE", "3": "COPY", "4": "CHOO
                 "9": "PRINT LIST EDGES FILE", "10": "PRINT LIST EDGES CONSOLE", "11": "PRINT ADJACENCY LIST CONSOLE",
                 "13": "HELP", "14": "PRINT LIST COMMANDS", "15": "PRINT LIST GRAPHS", "0": "EXIT",
                 "100": "IN DEGREE", "101": "TASK Ib 18", "102": "ACYCLE", "103": "K_PATH", "104": "KRUSKAL",
-                "201": "DIJKSTRA"}
+                "201": "DIJKSTRA", "202": "BELLMAN_FORD", "203": "FLOYD"}
 
 commands = {"CREATE EMPTY": "Create a new empty graph",
             "CREATE FILE": "Create a new graph from the file",
@@ -28,9 +28,9 @@ commands = {"CREATE EMPTY": "Create a new empty graph",
             "ACYCLE": "Find out whether the graph is acycle",
             "K_PATH": "-",
             "KRUSKAL": "Find the minimum spanning tree",
-            "DIJKSTRA": "Find the minimum distance from node to other nodes"
-
-            }
+            "DIJKSTRA": "Find the minimum distance from node to other nodes",
+            "BELLMAN_FORD": "Find the minimum distance from node to other nodes, weights can be negative",
+            "FLOYD": "Find the minimum distance from node to other nodes, weights can be negative"}
 
 graphs = {}
 chosen_graph = None
@@ -204,7 +204,12 @@ if __name__ == '__main__':
                     cur_graph = get_graph_by_name(None)
                 if cur_graph is not None:
                     print(f"Current graph is: {chosen_graph}")
-                    print(cur_graph.create_edge_list())
+                    lst = cur_graph.create_edge_list(False)
+                    for e in lst:
+                        if cur_graph.weighted:
+                            print(*e)
+                        else:
+                            print(f"{e[0]} {e[1]}")
 
             elif command == "PRINT ADJACENCY LIST CONSOLE" or command == "11":
                 if cur_graph is None:
@@ -295,7 +300,7 @@ if __name__ == '__main__':
                     print(f"Current graph is: {chosen_graph}")
                     tasks.kruskal(cur_graph)
 
-            elif command == "Dijkstra" or command == "201":
+            elif command == "DIJKSTRA" or command == "201":
                 if cur_graph is None:
                     cur_graph = get_graph_by_name(None)
                 if cur_graph is not None:
@@ -336,6 +341,78 @@ if __name__ == '__main__':
                         else:
                             print(f"No path between {u} & {v2}")
 
+            elif command == "BELLMAN_FORD" or command == "202":
+                if cur_graph is None:
+                    cur_graph = get_graph_by_name(None)
+                if cur_graph is not None:
+                    print(f"Current graph is: {chosen_graph}")
+                    print(f"Enter the node u: ", end="")
+                    u = input()
+                    if u not in cur_graph.nodes_list:
+                        print("ERROR No such node")
+                    else:
+                        n = len(cur_graph.nodes_list)
+                        for v in range(n):
+                            if cur_graph.nodes_list[v] != u:
+                                d, pr = tasks.bellman_ford(cur_graph, cur_graph.nodes_list[v])
+                                #print(d, pr)
+                                if d[cur_graph.nodes_list.index(u)] != tasks.INF:
+                                    print(f"min distance between {cur_graph.nodes_list[v]} & {u}: {d[cur_graph.nodes_list.index(u)]}")
+                                    path = []
+                                    v1 = cur_graph.nodes_list.index(u)
+                                    s = v
+                                    while v1 != s:
+                                        path.append(cur_graph.nodes_list[v1])
+                                        v1 = pr[v1]
+                                    print(f"Path: {cur_graph.nodes_list[v]}-{'-'.join(path[::-1])}")
+                                else:
+                                    print(f"No path between {cur_graph.nodes_list[v]} & {u}")
+
+            elif command == "FLOYD" or command == "203":
+                if cur_graph is None:
+                    cur_graph = get_graph_by_name(None)
+                if cur_graph is not None:
+                    print(f"Current graph is: {chosen_graph}")
+                    print(f"Enter the node u: ", end="")
+                    u = input()
+                    print(f"Enter the node v1: ", end="")
+                    v1 = input()
+                    print(f"Enter the node v2: ", end="")
+                    v2 = input()
+                    if u not in cur_graph.nodes_list or v1 not in cur_graph.nodes_list or v2 not in cur_graph.nodes_list:
+                        print("ERROR No such node")
+                    else:
+                        A, pr, cycle = tasks.floyd(cur_graph)
+                        # print(d, pr)
+                        if cycle:
+                            print('Negative-weight cycle found')
+                        else:
+                            if A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)] != tasks.INF:
+                                print(f"min distance between {u} & {v1}: {A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)]}")
+                                path = []
+                                v = cur_graph.nodes_list.index(v1)
+                                s = cur_graph.nodes_list.index(u)
+
+                                while v != s:
+                                    #print(v, pr[s][v])
+                                    path.append(cur_graph.nodes_list[v])
+                                    v = pr[s][v]
+                                print(f"Path: {u}-{'-'.join(path[::-1])}")
+                            else:
+                                print(f"No path between {u} & {v1}")
+
+                            if A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v2)] != tasks.INF:
+                                print(f"min distance between {u} & {v2}: {A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v2)]}")
+                                path = []
+                                v = cur_graph.nodes_list.index(v2)
+                                s = cur_graph.nodes_list.index(u)
+                                while v != s:
+                                    #print(v)
+                                    path.append(cur_graph.nodes_list[v])
+                                    v = pr[s][v]
+                                print(f"Path: {u}-{'-'.join(path[::-1])}")
+                            else:
+                                print(f"No path between {u} & {v2}")
 
         print("\nENTER THE COMMAND: ", end="")
         command = input()

@@ -123,6 +123,9 @@ def kruskal(graph):
     try:
         edge_list = sorted(edge_list, key=lambda item: int(item[2]))
         while j < n - 1:
+            if i > len(edge_list) - 1:
+                print("EROOR: Can't build the tree")
+                return
             u, v, w = edge_list[i]
             i += 1
             x = search(graph, parent, u)
@@ -167,6 +170,99 @@ def dijkstra(graph, s):
     return d, pr
 
 
-gr = Graph()
-gr.create_from_file("Dei.txt")
-print(gr.adj_list)
+def bellman_ford(graph, s):
+    gr = graph.copy()
+    n = len(gr.nodes_list)
+    d = [INF] * n
+    d[gr.nodes_list.index(s)] = 0
+    edges = gr.create_edge_list(True)
+    pr = [0] * n
+    # print(edges)
+    m = len(edges)
+    while True:
+        flag = False
+        for j in range(m):
+            e = edges[j]
+            a = gr.nodes_list.index(e[0])
+            b = gr.nodes_list.index(e[1])
+            cost = int(e[2])
+            if d[a] < INF:
+                if d[b] > d[a] + cost:
+                    d[b] = d[a] + cost
+                    pr[b] = a
+                    flag = True
+        if not flag:
+            break
+    return d, pr
+
+
+def create_matrix_adj(gr):
+    n = len(gr.adj_list)
+    A = [[INF if i != j else 0 for i in range(n)] for j in range (n)]
+    for x in gr.adj_list:
+        a = gr.nodes_list.index(x)
+        for v in gr.adj_list[x]:
+            b = gr.nodes_list.index(v[0])
+            cost = int(v[-1])
+            A[a][b] = cost
+            if gr.type == "!directed":
+                A[b][a] = cost
+    return A
+
+
+def create_matrix_pr(gr):
+    n = len(gr.adj_list)
+    pr = [[None for i in range(n)] for j in range(n)]
+    for x in gr.adj_list:
+        a = gr.nodes_list.index(x)
+        for v in gr.adj_list[x]:
+            b = gr.nodes_list.index(v[0])
+            pr[a][b] = a
+            if gr.type == "!directed":
+                pr[b][a] = b
+    return pr
+
+
+def print_matrix(A):
+    for x in A:
+        for y in x:
+            if y == INF:
+                print(f"{'INF': ^5}", end=" ")
+            else:
+                print(f"{'None' if y is None else y: ^5}", end=" ")
+        print()
+
+
+def floyd(graph):
+    gr = graph.copy()
+    n = len(gr.adj_list)
+    A = create_matrix_adj(gr)
+    cycle = False
+    pr = create_matrix_pr(gr)
+    for k in range(n):
+        for v in range(n):
+            for u in range(n):
+                if A[v][k] != INF and A[k][u] != INF and A[v][k] + A[k][u] < A[v][u]:
+                    A[v][u] = A[v][k] + A[k][u]
+                    pr[v][u] = pr[k][u]
+                    #print(pr[v][u], pr[v][k], pr[k][u])
+            if A[v][v] < 0:
+                cycle = True
+                # print('Negative-weight cycle found')
+                # return
+        # print(k)
+        # print_matrix(A)
+        # print()
+        # print_matrix(pr)
+        # print()
+    #print_matrix(pr)
+    return A, pr, cycle
+
+
+# gr = Graph()
+# gr.create_from_file("Dei.txt")
+gr1 = Graph()
+gr1.create_from_file("Dei.txt")
+# # print(dijkstra(gr, "A"))
+# #print(bellman_ford(gr1, '1'))
+#floyd(gr1)
