@@ -6,7 +6,8 @@ commands_num = {"1": "CREATE EMPTY", "2": "CREATE FILE", "3": "COPY", "4": "CHOO
                 "9": "PRINT LIST EDGES FILE", "10": "PRINT LIST EDGES CONSOLE", "11": "PRINT ADJACENCY LIST CONSOLE",
                 "13": "HELP", "14": "PRINT LIST COMMANDS", "15": "PRINT LIST GRAPHS", "0": "EXIT",
                 "100": "IN DEGREE", "101": "TASK Ib 18", "102": "ACYCLE", "103": "K_PATH", "104": "KRUSKAL",
-                "201": "DIJKSTRA", "202": "BELLMAN_FORD", "203": "FLOYD"}
+                "201": "DIJKSTRA", "202": "BELLMAN_FORD", "203": "FLOYD", "301": "FLOYD",
+                "401": "DINIC"}
 
 commands = {"CREATE EMPTY": "Create a new empty graph",
             "CREATE FILE": "Create a new graph from the file",
@@ -30,7 +31,8 @@ commands = {"CREATE EMPTY": "Create a new empty graph",
             "KRUSKAL": "Find the minimum spanning tree",
             "DIJKSTRA": "Find the minimum distance from node to other nodes",
             "BELLMAN_FORD": "Find the minimum distance from node to other nodes, weights can be negative",
-            "FLOYD": "Find the minimum distance from node to other nodes, weights can be negative"}
+            "FLOYD": "Find the minimum distance from node to other nodes, weights can be negative",
+            "DINIC": "Find the maximum flow"}
 
 graphs = {}
 chosen_graph = None
@@ -413,6 +415,11 @@ if __name__ == '__main__':
                                 print(f"Path: {u}-{'-'.join(path[::-1])}")
                             else:
                                 print(f"No path between {u} & {v2}")
+            elif command == "DINIC" or command == "401":
+                if cur_graph is None:
+                    cur_graph = get_graph_by_name(None)
+                if cur_graph is not None:
+                    print(f"Current graph is: {chosen_graph}")
 
         print("\nENTER THE COMMAND: ", end="")
         command = input()

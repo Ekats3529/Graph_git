@@ -47,9 +47,10 @@ def dfs(node, gr):
 
 def acycle(graph):
     if graph.type == "!directed":
-        print("Graph is directed")
+        print("Graph is not directed")
         return
     global color, cycle
+    cycle = False
     gr = graph.copy()
     color = [0 for _ in range(len(gr.nodes_list))]
     for node in gr.nodes_list:
@@ -245,7 +246,7 @@ def floyd(graph):
                 if A[v][k] != INF and A[k][u] != INF and A[v][k] + A[k][u] < A[v][u]:
                     A[v][u] = A[v][k] + A[k][u]
                     pr[v][u] = pr[k][u]
-                    #print(pr[v][u], pr[v][k], pr[k][u])
+                    # print(pr[v][u], pr[v][k], pr[k][u])
             if A[v][v] < 0:
                 cycle = True
                 # print('Negative-weight cycle found')
@@ -255,8 +256,18 @@ def floyd(graph):
         # print()
         # print_matrix(pr)
         # print()
-    #print_matrix(pr)
+    # print_matrix(pr)
     return A, pr, cycle
+
+edges = []
+def add_edge(a, b, cap):
+    edge =
+def dinic():
+    flow = 0
+    while True:
+        if not bfs():
+            break
+    return flow
 
 
 # gr = Graph()
@@ -265,4 +276,4 @@ gr1 = Graph()
 gr1.create_from_file("Dei.txt")
 # # print(dijkstra(gr, "A"))
 # #print(bellman_ford(gr1, '1'))
-#floyd(gr1)
+# floyd(gr1)
