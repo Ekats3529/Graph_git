@@ -88,7 +88,7 @@ def k_path(graph, k):
         d, p = bfs(node, gr)
         if max(d) + 1 <= k and d.count(-1) == 1:
             ans.append(node)
-        #print(node, d, p)
+        # print(node, d, p)
     print(f"The list of vertexes which shortest way to others <= {k}: {' '.join(ans)}")
 
 
@@ -199,7 +199,7 @@ def bellman_ford(graph, s):
 
 def create_matrix_adj(gr):
     n = len(gr.adj_list)
-    A = [[INF if i != j else 0 for i in range(n)] for j in range (n)]
+    A = [[INF if i != j else 0 for i in range(n)] for j in range(n)]
     for x in gr.adj_list:
         a = gr.nodes_list.index(x)
         for v in gr.adj_list[x]:
@@ -259,21 +259,4 @@ def floyd(graph):
     # print_matrix(pr)
     return A, pr, cycle
 
-edges = []
-def add_edge(a, b, cap):
-    edge =
-def dinic():
-    flow = 0
-    while True:
-        if not bfs():
-            break
-    return flow
 
-
-# gr = Graph()
-# gr.create_from_file("Dei.txt")
-gr1 = Graph()
-gr1.create_from_file("Dei.txt")
-# # print(dijkstra(gr, "A"))
-# #print(bellman_ford(gr1, '1'))
-# floyd(gr1)
