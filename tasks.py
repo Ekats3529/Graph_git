@@ -143,6 +143,7 @@ def kruskal(graph):
         result_weight += int(weight)
         print(f"({u}, {v}) - {weight}")
     print(f"Weight of all graph: {result_weight}")
+    return result
 
 
 # Вывести длины кратчайших путей от u до v1 и v2.
