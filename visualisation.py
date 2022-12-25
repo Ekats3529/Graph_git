@@ -30,7 +30,7 @@ class Window(QDialog):
         super(Window, self).__init__()
         uic.loadUi('new_interface.ui', self)
         self.setWindowTitle('Graph Visualizer')
-        self.fig = plt.figure(1)
+        self.fig = plt.figure()
         self.canvas = FigureCanvas(self.fig)
         self.toolbar = NavigationToolbar(self.canvas, self)
 
@@ -47,8 +47,6 @@ class Window(QDialog):
         self.cur = None
         self.opt = None
 
-        self.fig_dial = plt.figure(2)
-        self.canvas_dial = FigureCanvas(self.fig_dial)
 
     def clear(self):
         for ax in self.fig.axes:
@@ -106,9 +104,9 @@ class Window(QDialog):
 
             self.canvas.draw()
 
-            DialTree = DialogTree(self, self.fig_dial, self.canvas_dial, self.opt, [new_gr, pos, options])
-            DialTree.show()
-            DialTree.exec()
+            # DialTree = DialogTree(self, self.opt, [new_gr, pos, options, gr.weighted])
+            # DialTree.show()
+            # DialTree.exec()
 
     def show_graph(self):
         self.clear()
@@ -224,16 +222,20 @@ class Window(QDialog):
 
             self.canvas.draw()
 
-            DialTree = DialogTree(self, self.fig_dial, self.canvas_dial, "krus", [krus, pos, options])
-            DialTree.show()
-            DialTree.exec()
+            # DialTree = DialogTree(self, "krus", [krus, pos, options])
+            # DialTree.show()
+            # DialTree.exec()
 
         except Exception as e:
             print(e)
 
 
+fig_dial = plt.figure()
+canvas_dial = FigureCanvas(fig_dial)
+
+
 class DialogTree(QDialog):
-    def __init__(self, mainwindow, fig_dial, canvas_dial, type, opt):
+    def __init__(self, mainwindow, type, opt):
         super().__init__()
         uic.loadUi('tree.ui', self)
 
@@ -265,8 +267,7 @@ class DialogTree(QDialog):
 
     def dfs_bfs(self, opt):
         self.clear()
-
-        Gr, pos, options = opt[0], opt[1], opt[2]
+        Gr, pos, options, w = opt[0], opt[1], opt[2], opt[-1]
         nx.draw_networkx(Gr, pos=pos, arrows=True, **options)
 
         self.canvas.draw()
