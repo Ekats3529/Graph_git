@@ -394,6 +394,16 @@ if __name__ == '__main__':
                         # print(d, pr)
                         if cycle:
                             print('Negative-weight cycle found')
+                            if A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)] != tasks.INF:
+                                print(f"min distance between {u} & {v1}: {A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)]}")
+                            else:
+                                print(f"No path between {u} & {v1}")
+
+                            if A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v2)] != tasks.INF:
+                                print(f"min distance between {u} & {v2}: {A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v2)]}")
+                            else:
+                                print(f"No path between {u} & {v2}")
+
                         else:
                             if A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)] != tasks.INF:
                                 print(f"min distance between {u} & {v1}: {A[cur_graph.nodes_list.index(u)][cur_graph.nodes_list.index(v1)]}")

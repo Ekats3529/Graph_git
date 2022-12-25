@@ -239,15 +239,19 @@ def floyd(graph):
     A = create_matrix_adj(gr)
     cycle = False
     pr = create_matrix_pr(gr)
+    cycle_nodes = []
     for k in range(n):
         for v in range(n):
             for u in range(n):
-                if A[v][k] != INF and A[k][u] != INF and A[v][k] + A[k][u] < A[v][u]:
+                if A[v][k] != INF and A[k][u] != INF and A[v][k] + A[k][u] < A[v][u] and \
+                        u not in cycle_nodes and v not in cycle_nodes:
                     A[v][u] = A[v][k] + A[k][u]
                     pr[v][u] = pr[k][u]
                     # print(pr[v][u], pr[v][k], pr[k][u])
             if A[v][v] < 0:
                 cycle = True
+                cycle_nodes.append(v)
+
                 # print('Negative-weight cycle found')
                 # return
         # print(k)
@@ -255,7 +259,13 @@ def floyd(graph):
         # print()
         # print_matrix(pr)
         # print()
+    # print_matrix(A)
     # print_matrix(pr)
     return A, pr, cycle
 
 
+# gr1 = Graph()
+# gr1.create_from_file("floyd.txt")
+#
+# floyd(gr1)
+# # floyd(gr1)

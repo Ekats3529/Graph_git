@@ -30,12 +30,6 @@ class Window(QDialog):
         super(Window, self).__init__()
         uic.loadUi('new_interface.ui', self)
         self.setWindowTitle('Graph Visualizer')
-        self.fig = plt.figure()
-        self.canvas = FigureCanvas(self.fig)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-
-        self.verticalLayout.addWidget(self.toolbar)
-        self.verticalLayout.addWidget(self.canvas)
 
         self.pushButton_graph.clicked.connect(self.show_graph)
         self.pushButton_bfs.clicked.connect(self.bfs)
@@ -47,6 +41,18 @@ class Window(QDialog):
         self.cur = None
         self.opt = None
 
+        self.init()
+
+    def init(self):
+        for i in reversed(range(self.verticalLayout.count())):
+            self.verticalLayout.itemAt(i).widget().setParent(None)
+
+        self.fig = plt.figure()
+        self.canvas = FigureCanvas(self.fig)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+        self.verticalLayout.addWidget(self.toolbar)
+        self.verticalLayout.addWidget(self.canvas)
 
     def clear(self):
         for ax in self.fig.axes:
@@ -104,11 +110,12 @@ class Window(QDialog):
 
             self.canvas.draw()
 
-            # DialTree = DialogTree(self, self.opt, [new_gr, pos, options, gr.weighted])
-            # DialTree.show()
-            # DialTree.exec()
+            DialTree = DialogTree(self, self.opt, [new_gr, pos, options, gr.weighted])
+            DialTree.show()
+            DialTree.exec()
 
     def show_graph(self):
+        self.init()
         self.clear()
 
         G = nx.Graph()
@@ -140,6 +147,7 @@ class Window(QDialog):
         self.canvas.draw()
 
     def bfs(self):
+        self.init()
         self.clear()
 
         G = nx.Graph()
@@ -156,6 +164,7 @@ class Window(QDialog):
         self.cur = G
 
     def dfs(self):
+        self.init()
         self.clear()
 
         G = nx.Graph()
@@ -172,6 +181,7 @@ class Window(QDialog):
         self.cur = G
 
     def kruskal(self):
+        self.init()
         self.clear()
 
         G = nx.Graph()
@@ -222,16 +232,16 @@ class Window(QDialog):
 
             self.canvas.draw()
 
-            # DialTree = DialogTree(self, "krus", [krus, pos, options])
-            # DialTree.show()
-            # DialTree.exec()
+            DialTree = DialogTree(self, "krus", [krus, pos, options])
+            DialTree.show()
+            DialTree.exec()
 
         except Exception as e:
             print(e)
 
 
-fig_dial = plt.figure()
-canvas_dial = FigureCanvas(fig_dial)
+# fig_dial = plt.figure()
+# canvas_dial = FigureCanvas(fig_dial)
 
 
 class DialogTree(QDialog):
@@ -242,8 +252,8 @@ class DialogTree(QDialog):
         self.mainwindow = mainwindow
 
         self.setWindowTitle('Separate Tree')
-        self.fig = fig_dial
-        self.canvas = canvas_dial
+        self.fig = plt.figure()
+        self.canvas = FigureCanvas(self.fig)
 
         self.horizontalLayout.addWidget(self.canvas)
 
