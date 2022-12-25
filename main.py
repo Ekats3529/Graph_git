@@ -303,7 +303,10 @@ if __name__ == '__main__':
                     cur_graph = get_graph_by_name(None)
                 if cur_graph is not None:
                     print(f"Current graph is: {chosen_graph}")
-                    tasks.kruskal(cur_graph)
+                    res, weih = tasks.kruskal(cur_graph)
+                    for u, v, weight in res:
+                        print(f"({u}, {v}) - {weight}")
+                    print(f"Weight of all graph: {weih}")
 
             elif command == "DIJKSTRA" or command == "201":
                 if cur_graph is None:
@@ -438,7 +441,7 @@ if __name__ == '__main__':
                     cur_graph = get_graph_by_name(None)
                 if cur_graph is not None:
                     print(f"Current graph is: {chosen_graph}")
-                    visualisation.visualize(chosen_graph)
+                    visualisation.visualize(cur_graph)
 
         print("\nENTER THE COMMAND: ", end="")
         command = input()
